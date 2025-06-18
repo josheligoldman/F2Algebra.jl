@@ -4,29 +4,6 @@ using LinearAlgebra
 
 @testset "F2Algebra Tests" begin
 
-    # Helper to create identity BitMatrix
-    function bit_eye(n)
-        A = falses(n, n)
-        for i in 1:n
-            A[i,i] = true
-        end
-        return A
-    end
-
-    # Helper for F2 matrix-vector multiplication (returns BitVector)
-    function f2_mul(A::BitMatrix, x::BitVector)
-        m, n = size(A)
-        y = falses(m)
-        for i in 1:m
-            acc = false
-            for j in 1:n
-                acc ⊻= A[i,j] & x[j]
-            end
-            y[i] = acc
-        end
-        return y
-    end
-
     # Test 1: Identity matrix remains unchanged
     @testset "Identity Matrix" begin
         A = bit_eye(3)
