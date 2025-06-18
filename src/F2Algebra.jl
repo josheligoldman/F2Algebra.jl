@@ -16,14 +16,14 @@ function bit_eye(n::Integer)
 end
 
 """
-    f2_mul(A::BitMatrix, x::BitVector) -> BitVector
+    f2_mul(A::AbstractMatrix{Bool}, x::AbstractVector{Bool})
 
 Compute the matrix-vector product `A * x` over 𝔽₂ (mod 2).
 
 Returns a `BitVector` of length `size(A, 1)`, where each entry is computed
 as the XOR dot product of a row of `A` with `x`.
 """
-function f2_mul(A::BitMatrix, x::BitVector)
+function f2_mul(A::AbstractMatrix{Bool}, x::AbstractVector{Bool})
     m, n = size(A)
     if length(x) != n
         throw(DimensionMismatch("length of vector must match number of columns"))
