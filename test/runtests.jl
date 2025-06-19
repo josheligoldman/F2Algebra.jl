@@ -1,6 +1,5 @@
 using F2Algebra
 using Test
-using LinearAlgebra
 
 @testset "F2Algebra Tests" begin
 
