@@ -1,6 +1,6 @@
 module F2Algebra
 
-export rref!, rref, bit_eye, f2_mul
+export rref!, rref, bit_eye, f2_dot, f2_mul
 
 """
     bit_eye(n::Integer) -> BitMatrix
@@ -16,6 +16,24 @@ function bit_eye(n::Integer)
 end
 
 """
+    f2_dot(u::AbstractVector{Bool}, v::AbstractVector{Bool})
+
+Compute the dot product over 𝔽₂ (mod 2) of two `Bool` vectors `u` and `v`.
+
+Returns a `Bool` (false = 0, true = 1).
+"""
+function f2_dot(u::AbstractVector{Bool}, v::AbstractVector{Bool})
+    if length(u) != length(v)
+        throw(DimensionMismatch("vectors must be the same length"))
+    end
+    acc = false
+    for i in eachindex(u)
+        acc ⊻= u[i] & v[i]
+    end
+    return acc
+end
+
+"""
     f2_mul(A::AbstractMatrix{Bool}, x::AbstractVector{Bool})
 
 Compute the matrix-vector product `A * x` over 𝔽₂ (mod 2).
@@ -28,13 +46,9 @@ function f2_mul(A::AbstractMatrix{Bool}, x::AbstractVector{Bool})
     if length(x) != n
         throw(DimensionMismatch("length of vector must match number of columns"))
     end
-    y = falses(m)
+    y = BitVector(undef, m)
     for i in 1:m
-        acc = false
-        for j in 1:n
-            acc ⊻= A[i, j] & x[j]
-        end
-        y[i] = acc
+        y[i] = f2_dot(@view(A[i, :]), x)
     end
     return y
 end
